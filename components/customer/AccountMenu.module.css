@@ -1,0 +1,196 @@
+/* ==========================================================================
+   Account menu — trigger button + dropdown panel for the customer navbar.
+   ========================================================================== */
+
+/* --- Trigger (icon + name + chevron) -------------------------------------- */
+
+.wrapper {
+  position: relative;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #f9fafb;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+  transition: color 0.15s ease;
+}
+
+.trigger:hover,
+.triggerActive {
+  color: var(--accent);
+}
+
+.triggerActive {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.triggerName {
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+}
+
+.triggerActive .chevron {
+  transform: rotate(180deg);
+}
+
+/* --- Dropdown panel ------------------------------------------------------- */
+
+.panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 100;
+  width: 232px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0.15s ease;
+  pointer-events: none;
+}
+
+.panelOpen {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* --- Customer info -------------------------------------------------------- */
+
+.info {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.infoName {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #111827;
+  letter-spacing: 0.02em;
+}
+
+.infoEmail {
+  margin: 2px 0 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #6b7280;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* --- Menu list ------------------------------------------------------------ */
+
+.menuList {
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+}
+
+.menuItem {
+  width: 100%;
+}
+
+.menuLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #374151;
+  background: transparent;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.12s ease;
+}
+
+.menuLink:hover {
+  background: #f3f4f6;
+}
+
+.menuIcon {
+  flex-shrink: 0;
+  color: #6b7280;
+}
+
+/* --- Logout section ------------------------------------------------------- */
+
+.logoutSection {
+  padding: 6px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.logoutLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #ef4444;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  transition: background 0.12s ease;
+}
+
+.logoutLink:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+.logoutLink:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.logoutIcon {
+  flex-shrink: 0;
+}
+
+/* --- Responsive ----------------------------------------------------------- */
+
+@media (max-width: 920px) {
+  .triggerName {
+    display: none;
+  }
+}

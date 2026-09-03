@@ -1,0 +1,31 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.name {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  color: #111827;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #3b82f6;
+  color: #ffffff;
+}

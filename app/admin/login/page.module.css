@@ -1,0 +1,287 @@
+/* ============================= Login page =============================
+   Design reference (Figma "Admin Page Prototype"):
+   - Page background          #F9FAFB
+   - Card 448px wide, white, radius 8, soft shadow
+   - "Administrator" heading  32px / 800 / #1F2937
+   - "Log in" card title      26px / 700 / #1F2937
+   - Field labels             12px / #4B5563
+   - Inputs                   16px / border #D1D5DB / placeholder #9CA3AF
+   - "Sign In" button         #E5C034, radius 6, height 48
+   - Footer caption           "© LnR Cycle Center 2025"
+========================================================================*/
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-page);
+  color: var(--ink);
+}
+
+.container {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+}
+
+.brand {
+  position: relative;
+  width: 232px;
+  height: 72px;
+  margin-bottom: 24px;
+}
+
+.brandImage {
+  object-fit: contain;
+}
+
+.heading {
+  margin-bottom: 48px;
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--ink);
+}
+
+/* ----------------------------- Card ----------------------------- */
+
+.card {
+  width: 100%;
+  max-width: 448px;
+  padding: 32px;
+  background: var(--card-bg);
+  border: 1px solid rgba(209, 213, 219, 0.6);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.cardTitle {
+  margin-bottom: 32px;
+  font-size: 26px;
+  line-height: 36px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--ink);
+}
+
+/* ----------------------------- Form ----------------------------- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  margin-bottom: 24px;
+}
+
+.field:last-of-type {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--label);
+}
+
+.input {
+  width: 100%;
+  height: 48px;
+  padding: 12px 16px;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: inherit;
+  color: var(--ink);
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.input::placeholder {
+  color: var(--placeholder);
+}
+
+.input:hover {
+  border-color: #b6bcc6;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(229, 192, 52, 0.18);
+}
+
+.input:disabled {
+  background: #f2f6f9;
+  cursor: not-allowed;
+}
+
+.error {
+  margin: -4px 0 14px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--error);
+}
+
+/* ----------------------------- Button ----------------------------- */
+
+.button {
+  width: 100%;
+  height: 48px;
+  margin-top: 10px;
+  padding: 12px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #000000;
+  background: var(--accent);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.05s ease;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(229, 192, 52, 0.4);
+}
+
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ------------------------- Forgot password ------------------------- */
+
+.forgotArea {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.forgotLink {
+  padding: 4px 8px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  line-height: 20px;
+  font-family: inherit;
+  color: var(--muted);
+  text-align: center;
+  cursor: pointer;
+}
+
+.forgotLink:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+.forgotForm {
+  width: 100%;
+}
+
+.forgotLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--label);
+}
+
+.forgotRow {
+  display: flex;
+  gap: 8px;
+}
+
+.forgotRow .input {
+  flex: 1;
+  width: auto;
+  height: 42px;
+  padding: 8px 14px;
+  font-size: 14px;
+}
+
+.forgotButton {
+  flex-shrink: 0;
+  height: 38px;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #000000;
+  background: var(--accent);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.forgotButton:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.forgotButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.forgotSuccess {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 20px;
+  color: #15803d;
+}
+
+/* ----------------------------- Footer ----------------------------- */
+
+.footer {
+  width: 100%;
+  padding: 24px 16px 32px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 300;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ---------------------------- Responsive --------------------------- */
+
+@media (max-width: 520px) {
+  .heading {
+    font-size: 28px;
+    margin-bottom: 36px;
+  }
+
+  .card {
+    padding: 24px;
+  }
+}

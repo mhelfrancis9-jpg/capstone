@@ -1,0 +1,108 @@
+/* ==========================================================================
+   Storefront products listing — page title, category filter bar and the
+   responsive product grid. Card styles live in ProductCard.module.css.
+   ========================================================================== */
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.section {
+  background: #ffffff;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 48px 40px 80px;
+}
+
+.title {
+  margin-bottom: 24px;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #111827;
+}
+
+/* --- Category filter bar --------------------------------------------------- */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+.filterLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.filterLink:hover {
+  border-color: #f2c300;
+  color: #111827;
+}
+
+.filterActive {
+  border-color: #f2c300;
+  background: #fdf5d0;
+  color: #111827;
+}
+
+/* --- Grid ------------------------------------------------------------------ */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.empty {
+  padding: 40px 0 60px;
+  text-align: center;
+  font-size: 15px;
+  color: #6b7280;
+}
+
+/* --- Responsive ------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+  .container {
+    padding: 36px 20px 64px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px 18px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .filterLink {
+    padding: 0 14px;
+    font-size: 12px;
+  }
+}

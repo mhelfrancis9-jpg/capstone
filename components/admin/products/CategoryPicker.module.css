@@ -1,0 +1,126 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #344054;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 13px;
+  line-height: 18px;
+  color: #172033;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease;
+}
+
+.trigger:hover {
+  border-color: #3b82f6;
+}
+
+.triggerText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.selectedName {
+  font-weight: 500;
+  color: #172033;
+}
+
+.selectedNote {
+  font-size: 12px;
+  line-height: 16px;
+  color: #7a8495;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: #7a8495;
+  transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  margin-top: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid #eef0f3;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.empty {
+  padding: 12px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #7a8495;
+}
+
+.option {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  line-height: 18px;
+  color: #172033;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.option:hover {
+  background: #f8fafc;
+}
+
+.optionActive {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.optionName {
+  font-weight: 500;
+}
+
+.optionNote {
+  font-size: 12px;
+  line-height: 16px;
+  color: #7a8495;
+  text-align: right;
+}
+
+.optionNoteActive {
+  color: #3b82f6;
+}
+
+.error {
+  font-size: 12px;
+  line-height: 16px;
+  color: #d92d20;
+}

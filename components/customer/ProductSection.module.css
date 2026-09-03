@@ -1,0 +1,80 @@
+/* ==========================================================================
+   Product row — centered heading, 4 columns, small uppercase names,
+   bold peso prices, thin gold "View All" button. Card styles live in
+   ProductCard.module.css.
+   ========================================================================== */
+
+.section {
+  padding-top: 6px;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.title {
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #111827;
+}
+
+/* --- Grid ------------------------------------------------------------------ */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+/* --- View All button ------------------------------------------------------- */
+
+.viewAllWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.viewAll {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  padding: 0 14px;
+  border: 1px solid #f2c300;
+  border-radius: 3px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: background-color 0.15s ease;
+}
+
+.viewAll:hover {
+  background: #fdf5d0;
+}
+
+/* --- Responsive ------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+  .container {
+    padding: 0 20px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px 18px;
+  }
+
+  .title {
+    font-size: 19px;
+    margin-bottom: 24px;
+  }
+}
+

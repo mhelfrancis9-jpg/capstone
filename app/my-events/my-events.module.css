@@ -1,0 +1,139 @@
+.page {
+  min-height: 70vh;
+  background: #f7f7f8;
+  padding: 40px 20px 64px;
+}
+
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 22px;
+  color: #111827;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid #eceef1;
+  border-radius: 12px;
+  padding: 16px 18px;
+  flex-wrap: wrap;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 220px;
+}
+
+.eventName {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.meta {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.rider {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.status {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 11px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.pay_pending {
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.pay_paid {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.pay_failed {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.pay_refunded {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.pay_rejected {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.view,
+.pay {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 14px;
+  border-radius: 9px;
+  text-decoration: none;
+}
+
+.view {
+  border: 1px solid #d1d5db;
+  color: #374151;
+  background: #fff;
+}
+
+.pay {
+  background: #111827;
+  color: #fff;
+}
+
+.empty {
+  color: #6b7280;
+  font-size: 15px;
+  padding: 30px 0;
+}
+
+.empty a {
+  color: #111827;
+  font-weight: 600;
+}
+
+.error {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 14px;
+}

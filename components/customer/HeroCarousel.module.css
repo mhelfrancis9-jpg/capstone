@@ -1,0 +1,242 @@
+/* ==========================================================================
+    Hero banner — full-viewport cycling image, dark overlay, headline +
+    CTAs. Image uses object-fit: cover at 35% opacity.
+    ========================================================================== */
+
+.wrap {
+  width: 100%;
+}
+
+.banner {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 560px;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.image {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.35;
+  animation: heroFade 0.5s ease;
+}
+
+@keyframes heroFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.35;
+  }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(17, 24, 39, 0.55) 0%,
+    rgba(17, 24, 39, 0.15) 60%,
+    rgba(17, 24, 39, 0.35) 100%
+  );
+}
+
+/* --- Hero content ---------------------------------------------------------- */
+
+.content {
+  position: absolute;
+  inset: 0;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (min-width: 1024px) {
+  .content {
+    padding: 0 32px;
+  }
+}
+
+.location {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.heading {
+  margin: 12px 0 0;
+  max-width: 32ch;
+  font-family: var(--font-archivo), var(--font-sans);
+  font-weight: 800;
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  line-height: 1.05;
+  color: #ffffff;
+}
+
+.subtext {
+  margin: 16px 0 0;
+  max-width: 36rem;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #d1d5db;
+}
+
+.ctaRow {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ctaPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.ctaPrimary:hover {
+  background: var(--accent-hover);
+}
+
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  background: transparent;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.ctaSecondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ctaSecondary svg {
+  color: var(--accent);
+}
+
+/* --- Arrows ---------------------------------------------------------------- */
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(5, 5, 5, 0.45);
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  z-index: 2;
+}
+
+.arrow:hover {
+  background: rgba(5, 5, 5, 0.7);
+}
+
+.arrowLeft {
+  left: 20px;
+}
+
+.arrowRight {
+  right: 20px;
+}
+
+/* --- Social icons ---------------------------------------------------------- */
+
+.socials {
+  position: absolute;
+  left: 20px;
+  bottom: 28px;
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(5, 5, 5, 0.55);
+  color: #ffffff;
+  transition: background-color 0.15s ease;
+}
+
+.social:hover {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+/* --- Responsive ------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+  .banner {
+    min-height: 520px;
+  }
+
+  .socials {
+    left: 20px;
+    bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner {
+    height: 100vh;
+    min-height: 480px;
+  }
+
+  .arrow {
+    width: 30px;
+    height: 30px;
+  }
+
+  .arrowLeft {
+    left: 10px;
+  }
+
+  .arrowRight {
+    right: 10px;
+  }
+
+  .socials {
+    left: 10px;
+  }
+
+  .heading {
+    font-size: 2rem;
+  }
+}

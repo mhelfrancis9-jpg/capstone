@@ -1,0 +1,825 @@
+/* ==========================================================================
+   "Custom Bike Builder" — landing, 15-step wizard and review.
+   Reuses the project's existing header/footer. The landing mirrors the
+   original Figma frame (1440 wide, 720-wide centred content column); the
+   builder/review states extend it with product cards, axis selects, progress
+   and the final review list.
+   ========================================================================== */
+
+.page {
+  width: 100%;
+  background: #ffffff;
+  padding: 64px 24px 80px;
+  display: flex;
+  justify-content: center;
+}
+
+.column {
+  width: 720px;
+  max-width: 100%;
+}
+
+/* Shared empty / error message state. */
+.message {
+  width: 720px;
+  max-width: 100%;
+}
+
+.errorText {
+  margin: 16px 0 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 48px;
+  color: #000000;
+}
+
+.lead {
+  margin: 16px 0 0;
+  max-width: 747px;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #4b5563;
+}
+
+/* ---- Landing hero image ---- */
+.hero {
+  position: relative;
+  margin-top: 32px;
+  width: 100%;
+  height: 405px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.heroImg {
+  object-fit: cover;
+}
+
+/* ---- Landing price row ---- */
+.priceRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding: 16px 0;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.priceLabel {
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #6b7280;
+}
+
+.priceValue {
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  color: #000000;
+}
+
+/* ---- AI builder card ---- */
+.aiCard {
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.aiHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aiIcon {
+  width: 18px;
+  height: 18px;
+  color: #000000;
+  flex-shrink: 0;
+}
+
+.aiTitle {
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #000000;
+}
+
+.optional {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: #f3f4f6;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 15px;
+  letter-spacing: 0.25px;
+  color: #6b7280;
+}
+
+.aiDesc {
+  margin: 12px 0 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #4b5563;
+}
+
+.textarea {
+  margin-top: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 12px;
+}
+
+.textareaInput {
+  width: 100%;
+  min-height: 62px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  background: transparent;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #111827;
+}
+
+.textareaInput::placeholder {
+  color: #9ca3af;
+}
+
+.chips {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  background: #ffffff;
+  cursor: pointer;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #4b5563;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.chip:hover {
+  border-color: #9ca3af;
+  background: #f9fafb;
+}
+
+/* ---- Build button ---- */
+.buildBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #1a1a1a;
+  cursor: pointer;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  color: #ffffff;
+  transition: background 0.15s ease;
+}
+
+.buildBtn:hover {
+  background: #000000;
+}
+
+.buildIcon {
+  width: 16px;
+  height: 16px;
+  color: #ffffff;
+}
+
+/* ---- Landing parts checklist ---- */
+.partsHeading {
+  margin: 56px 0 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #000000;
+}
+
+.partsList {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.partItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.partBadge {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background: #f1f2f4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 16px;
+  color: #5a5f66;
+}
+
+.partBody {
+  min-width: 0;
+}
+
+.partTitle {
+  margin: 2px 0 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #2b2b2b;
+}
+
+.partDesc {
+  margin: 4px 0 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #5a5f66;
+}
+
+.note {
+  margin: 40px 0 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #6b7280;
+}
+
+/* ---- Start building CTA ---- */
+.startBuilding {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 8px;
+  background: #e6b800;
+  cursor: pointer;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #000000;
+  transition: background 0.15s ease;
+}
+
+.startBuilding:hover {
+  background: #d4a800;
+}
+
+.startArrow {
+  width: 18px;
+  height: 18px;
+  color: #000000;
+}
+
+
+/* ---- Builder: progress ---- */
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.progressLabel {
+  flex-shrink: 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 18px;
+  color: #6b7280;
+}
+
+.progressTrack {
+  flex: 1;
+  height: 8px;
+  border-radius: 9999px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 9999px;
+  background: #e6b800;
+  transition: width 0.3s ease;
+}
+
+/* ---- Builder: step heading ---- */
+.stepTitle {
+  margin: 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
+  color: #000000;
+}
+
+.stepDesc {
+  margin: 12px 0 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  color: #4b5563;
+}
+
+.stepNotice {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #92400e;
+}
+
+/* ---- Builder: product grid ---- */
+.productGrid {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.productCard,
+.productCardActive {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.productCard:hover {
+  border-color: #9ca3af;
+}
+
+.productCardActive {
+  border-color: #e6b800;
+  box-shadow: 0 0 0 2px rgba(230, 184, 0, 0.35);
+}
+
+.productImage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #f3f4f6;
+}
+
+.productImg {
+  object-fit: cover;
+}
+
+.productBody {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.productName {
+  margin: 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 20px;
+  color: #111827;
+}
+
+.productDesc {
+  margin: 6px 0 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 17px;
+  color: #6b7280;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.productPrice {
+  margin: auto 0 0;
+  padding-top: 10px;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 20px;
+  color: #000000;
+}
+
+/* ---- Builder: axis selectors ---- */
+.optionsCard {
+  margin-top: 28px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fafafa;
+}
+
+.optionsTitle {
+  margin: 0 0 16px;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 20px;
+  color: #111827;
+}
+
+.axisGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+}
+
+.axisField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 180px;
+}
+
+.axisLabel {
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 18px;
+  color: #374151;
+}
+
+.axisSelect {
+  appearance: none;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #111827;
+  cursor: pointer;
+}
+
+.axisSelect:focus {
+  outline: 2px solid rgba(230, 184, 0, 0.5);
+  border-color: #e6b800;
+}
+
+/* ---- Builder: nav ---- */
+.stepNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #374151;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.backBtn:hover:not(:disabled) {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.backBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.nextBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background: #e6b800;
+  cursor: pointer;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  color: #000000;
+  transition: background 0.15s ease;
+}
+
+.nextBtn:hover {
+  background: #d4a800;
+}
+
+.nextArrow {
+  width: 16px;
+  height: 16px;
+  color: #000000;
+}
+
+
+/* ---- Review ---- */
+.editBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 10px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 18px;
+  color: #374151;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.editBtn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.reviewList {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.reviewItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.reviewBadge {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background: #f1f2f4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 16px;
+  color: #5a5f66;
+}
+
+.reviewBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.reviewName {
+  margin: 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 20px;
+  color: #111827;
+}
+
+.reviewProduct {
+  margin-left: 8px;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+.reviewAxes {
+  margin: 4px 0 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #6b7280;
+}
+
+.reviewPrice {
+  flex-shrink: 0;
+  margin: 0 0 0 12px;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 20px;
+  color: #000000;
+  text-align: right;
+}
+
+.totalRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding: 16px 0;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.totalLabel {
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 20px;
+  color: #374151;
+}
+
+.totalValue {
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  color: #000000;
+}
+
+.reviewActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.addToCart {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 8px;
+  background: #e6b800;
+  cursor: pointer;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #000000;
+  transition: background 0.15s ease;
+}
+
+.addToCart:hover:not(:disabled) {
+  background: #d4a800;
+}
+
+.addToCart:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.cartIcon {
+  width: 18px;
+  height: 18px;
+  color: #000000;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 760px) {
+  .page {
+    padding: 40px 16px 56px;
+  }
+
+  .title {
+    font-size: 36px;
+    line-height: 40px;
+  }
+
+  .stepTitle {
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  .hero {
+    height: 240px;
+  }
+
+  .partsHeading {
+    margin-top: 40px;
+  }
+
+  .productGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .reviewItem {
+    flex-wrap: wrap;
+  }
+
+  .reviewPrice {
+    width: 100%;
+    margin: 8px 0 0 44px;
+    text-align: left;
+  }
+
+  .reviewActions,
+  .stepNav {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nextBtn,
+  .addToCart {
+    margin-left: 0;
+    justify-content: center;
+  }
+}
+

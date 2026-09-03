@@ -1,0 +1,317 @@
+.analytics {
+  margin-top: 16px; /* 16px below the statistics cards */
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e1e5ea;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  padding: 18px 24px 16px;
+}
+
+/* --- Header row ----------------------------------------------------------- */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 39px;
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #172033;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.printButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #566173;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.printButton:hover {
+  background: rgba(86, 97, 115, 0.08);
+  color: #172033;
+}
+
+/* --- Date range dropdown --------------------------------------------------- */
+
+.dropdown {
+  position: relative;
+}
+
+.dropdownTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 130px;
+  height: 39px;
+  padding: 0 12px;
+  border: 1px solid #d8dde5;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 12px;
+  font-weight: 400;
+  color: #273247;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.dropdownTrigger:hover {
+  border-color: #c6cdd8;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: #566173;
+  transition: transform 0.15s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 30;
+  width: 190px;
+  padding: 4px;
+  background: #ffffff;
+  border: 1px solid #e1e5ea;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 12px;
+  color: #4b5565;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.option:hover {
+  background: #f1f5f9;
+}
+
+.optionActive {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+/* --- Chart ---------------------------------------------------------------- */
+
+.chart {
+  display: flex;
+  flex-direction: column;
+  height: 330px;
+  margin-top: 16px;
+}
+
+.chartBody {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.yAxis {
+  position: relative;
+  flex-shrink: 0;
+  width: 64px;
+}
+
+.yLabel {
+  position: absolute;
+  right: 16px;
+  transform: translateY(-50%);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 14px;
+  color: #7b8494;
+}
+
+.chartMain {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.plot {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.hGrid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed #e9ecf1;
+}
+
+.bars {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.barGroup {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+}
+
+.vGrid {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 1px dashed #eef0f3;
+}
+
+.bar {
+  position: relative;
+  width: 100%;
+  background: #3b82f6;
+  border-radius: 4px 4px 0 0;
+}
+
+.barValue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #172033;
+  white-space: nowrap;
+}
+
+.xAxis {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 28px;
+  margin-top: 8px;
+}
+
+.xLabel {
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 14px;
+  color: #737d8e;
+  text-align: center;
+}
+
+/* --- Footer ---------------------------------------------------------------- */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.footerText {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #596476;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.outlineButton,
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 39px;
+  padding: 0 18px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.outlineButton {
+  min-width: 189px;
+  background: #ffffff;
+  border: 1px solid #d8dde5;
+  color: #273247;
+}
+
+.outlineButton:hover {
+  border-color: #c6cdd8;
+  background: #f8fafc;
+}
+
+.primaryButton {
+  min-width: 145px;
+  background: #3b82f6;
+  border: 1px solid #3b82f6;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.primaryButton:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+@media (max-width: 1100px) {
+  .analytics {
+    overflow-x: auto;
+  }
+
+  .chart {
+    min-width: 720px;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer {
+    flex-wrap: wrap;
+  }
+}

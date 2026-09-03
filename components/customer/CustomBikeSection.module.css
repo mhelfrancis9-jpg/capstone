@@ -1,0 +1,254 @@
+/* ==========================================================================
+   "Custom is our specialty" / Build Your Own Custom Bike promo block.
+   Self-contained rebuild of the Figma frame (522:1454). The dark panel is
+   rebuilt at 1449.6x625 with a 1280x465 inner content area, then scaled to
+   fit laptop widths via a centred max-width container that stacks on small
+   screens. Existing storefront sections are untouched.
+   ========================================================================== */
+
+.section {
+  width: 100%;
+  /* Match the surrounding section rhythm without changing neighbours. */
+  margin-top: 46px;
+}
+
+.background {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* Figma gradient #282828 -> #2B2B2B (46%) -> #000000 */
+  background: linear-gradient(#282828 0%, #2b2b2b 46%, #000000 100%);
+}
+
+/* 5% red overlay (#D14444 @ 0.05) sitting above the gradient. */
+.redOverlay {
+  position: absolute;
+  inset: 0;
+  background: #d14444;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.container {
+  position: relative;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 80px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+/* ---- Left column: copy ---- */
+.content {
+  position: relative;
+  flex: 0 1 584px;
+  max-width: 584px;
+  min-width: 0;
+}
+
+.eyebrow {
+  margin: 0 0 24px;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 4.2px;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+
+.heading {
+  margin: 0 0 38px;
+  font-family: var(--font-archivo), "Archivo", "Arial Black", sans-serif;
+  font-weight: 900;
+  font-size: 60px;
+  line-height: 60px;
+  letter-spacing: 0;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.headingLine {
+  display: block;
+}
+
+.body {
+  margin: 0 0 48px;
+  max-width: 601px;
+  font-family: var(
+    --font-instrument-sans,
+    "Instrument Sans",
+    "Segoe UI",
+    Arial,
+    sans-serif
+  );
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 29.25px;
+  color: #d1d5db;
+}
+
+.buttonWrap {
+  display: flex;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  padding: 0 40px;
+  border-radius: 4px;
+  background: #e6b800;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: 0.45px;
+  color: #000000;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* ---- Right column: image tile ---- */
+.media {
+  position: relative;
+  flex: 0 1 557px;
+  width: 557px;
+  max-width: 557px;
+  height: 438px;
+  min-width: 0;
+}
+
+.mediaInner {
+  position: absolute;
+  /* Figma Container (522:1471) sits at x 763 / y 94 within the 584-wide
+     content; shift the image tile right and up for the layered look. */
+  top: -16px;
+  right: 0;
+  width: 584px;
+  height: 438px;
+  max-width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.image {
+  object-fit: cover;
+}
+
+/* Dark gradient overlay (Figma #000 0.4 -> 0, bottom-up). */
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+  pointer-events: none;
+}
+
+/* Soft blurred accent blobs. */
+.blobYellow {
+  position: absolute;
+  top: -41px;
+  right: -16px;
+  width: 96px;
+  height: 96px;
+  border-radius: 9999px;
+  background: #e6b800;
+  opacity: 0.138; /* 0.2 fill * 0.69 node opacity */
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.blobBlue {
+  position: absolute;
+  bottom: -30px;
+  left: -32px;
+  width: 128px;
+  height: 128px;
+  border-radius: 9999px;
+  background: #3b82f6;
+  opacity: 0.07; /* 0.2 fill * 0.35 node opacity */
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+/* ---- Responsive: adapt to laptop / tablet widths ---- */
+@media (max-width: 1080px) {
+  .container {
+    gap: 32px;
+    padding: 64px 28px;
+  }
+
+  .heading {
+    font-size: 48px;
+    line-height: 50px;
+  }
+
+  .media {
+    width: 460px;
+    max-width: 460px;
+  }
+
+  .mediaInner {
+    width: 100%;
+    height: 380px;
+  }
+}
+
+@media (max-width: 860px) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 56px 24px;
+    gap: 40px;
+  }
+
+  .content,
+  .media {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .media {
+    height: 380px;
+  }
+
+  .mediaInner {
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .blobYellow {
+    top: -20px;
+    right: 8px;
+  }
+
+  .blobBlue {
+    bottom: -20px;
+    left: 8px;
+  }
+}
+
+@media (max-width: 520px) {
+  .heading {
+    font-size: 38px;
+    line-height: 42px;
+  }
+
+  .body {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .button {
+    width: 100%;
+    height: 54px;
+  }
+}

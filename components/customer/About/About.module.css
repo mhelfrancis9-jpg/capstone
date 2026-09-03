@@ -1,0 +1,266 @@
+/* ==========================================================================
+   About Us page — design per the Figma/reference: dark hero + 3 service
+   cards + Visit Shop card + yellow CTA. Reuses the customer header/footer.
+   ========================================================================== */
+
+.page {
+  width: 100%;
+}
+
+/* --- Hero / About header -------------------------------------------------- */
+
+.hero {
+  width: 100%;
+  background: #2b2b2b;
+}
+
+.heroInner {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 64px 20px;
+}
+
+.label {
+  font-family: "Barlow Condensed", "Archivo", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: #e1b93c;
+}
+
+.title {
+  max-width: 768px;
+  margin-top: 12px;
+  font-family: "Archivo", "Inter", sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #ffffff;
+}
+
+.description {
+  max-width: 672px;
+  margin-top: 20px;
+  font-size: 18px;
+  line-height: 1.625;
+  color: #c4c8ce;
+}
+
+/* --- Content section ------------------------------------------------------ */
+
+.content {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 56px 20px;
+}
+
+/* --- Services ------------------------------------------------------------- */
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.serviceCard {
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.serviceIcon {
+  width: 24px;
+  height: 24px;
+  color: #b08d16;
+}
+
+.serviceTitle {
+  margin-top: 16px;
+  font-family: "Archivo", "Inter", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #2b2b2b;
+}
+
+.serviceDescription {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.625;
+  color: #5a5f66;
+}
+
+/* --- Shop + CTA ----------------------------------------------------------- */
+
+.bottomGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 48px;
+}
+
+/* --- Visit shop card ------------------------------------------------------ */
+
+.shopCard {
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.shopTitle {
+  font-family: "Archivo", "Inter", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #2b2b2b;
+}
+
+.shopList {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style: none;
+}
+
+.shopItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #5a5f66;
+}
+
+.shopIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #6b7280;
+}
+
+.hours {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hoursRow {
+  display: block;
+}
+
+.hoursDay {
+  font-weight: 500;
+  color: #2b2b2b;
+}
+
+/* --- Yellow CTA ----------------------------------------------------------- */
+
+.ctaCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #e1b93c;
+  padding: 32px;
+  border-radius: 8px;
+}
+
+.ctaTitle {
+  font-family: "Archivo", "Inter", sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #2b2b2b;
+}
+
+.ctaDescription {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 1.625;
+  color: #3d3d3d;
+}
+
+.ctaButton {
+  display: inline-block;
+  width: fit-content;
+  margin-top: 24px;
+  padding: 14px 24px;
+  border-radius: 6px;
+  background: #2b2b2b;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-decoration: none;
+  transition: background 150ms ease;
+}
+
+.ctaButton:hover {
+  background: #3d3d3d;
+}
+
+/* --- Responsive ----------------------------------------------------------- */
+
+@media (min-width: 1024px) {
+  .heroInner,
+  .content {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .heroInner {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+}
+
+@media (max-width: 767px) {
+  .heroInner {
+    padding: 48px 20px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .description {
+    font-size: 17px;
+  }
+
+  .content {
+    padding: 48px 20px;
+  }
+
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .bottomGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 32px;
+  }
+
+  .serviceCard,
+  .shopCard {
+    padding: 24px;
+  }
+
+  .ctaCard {
+    padding: 28px;
+  }
+}

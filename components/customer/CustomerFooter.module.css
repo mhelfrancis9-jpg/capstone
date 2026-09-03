@@ -1,0 +1,137 @@
+/* ==========================================================================
+   Customer footer — near-black, compact (~160–190px), three columns:
+   links / logo+copyright / follow+email.
+   ========================================================================== */
+
+.footer {
+  width: 100%;
+  background: #111111;
+  color: #e5e7eb;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 34px 40px 36px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 360px;
+  align-items: start;
+}
+
+/* --- Columns --------------------------------------------------------------- */
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+}
+
+.link {
+  color: #d1d5db;
+  font-size: 11px;
+  line-height: 1.4;
+  transition: color 0.15s ease;
+}
+
+.link:hover {
+  color: #f2c300;
+}
+
+.separator {
+  width: 100%;
+  max-width: 180px;
+  margin: 7px 0;
+  border-top: 1px solid #2b2b2b;
+}
+
+/* --- Brand ----------------------------------------------------------------- */
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo {
+  object-fit: contain;
+}
+
+.copyright {
+  font-size: 15px;
+  color: #9ca3af;
+}
+
+/* --- Follow / email -------------------------------------------------------- */
+
+.follow {
+  font-size: 11px;
+  font-weight: 600;
+  color: #f3f4f6;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #050505;
+  color: #ffffff;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.socialLink:hover {
+  background: #f2c300;
+  color: #050505;
+}
+
+.emailLabel {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.email {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #f3f4f6;
+  font-size: 11px;
+  word-break: break-all;
+}
+
+.email:hover {
+  color: #f2c300;
+}
+
+/* --- Responsive ------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+  .container {
+    padding: 28px 20px 30px;
+    grid-template-columns: 1fr;
+    /* Override the desktop `gap: 360px` — in the single-column mobile
+       stack that huge value would leave ~360px of empty space between
+       the brand, nav links and Follow Us sections. */
+    gap: 36px;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .column {
+    align-items: center;
+  }
+
+  .separator {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .brand {
+    order: -1;
+  }
+}

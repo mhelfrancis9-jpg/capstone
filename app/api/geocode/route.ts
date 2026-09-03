@@ -1,0 +1,199 @@
+import { NextRequest, NextResponse } from "next/server";
+
+/**
+ * Geocoding proxy.
+ *
+ * Forward:
+ *   { "address": "123 Example St" }
+ *
+ * Reverse:
+ *   { "latitude": 14.5995, "longitude": 120.9842 }
+ *
+ * Nominatim is used server-side so the request has a meaningful User-Agent.
+ */
+
+const NOMINATIM_URL = "https://nominatim.openstreetmap.org";
+
+// Replace this with your real project/store contact email before deployment.
+const USER_AGENT =
+  "LnRCycleCenter-Capstone/1.0 (contact: your-real-email@example.com)";
+
+type GeocodeResponse = {
+  latitude: number;
+  longitude: number;
+  address: string;
+};
+
+type NominatimSearchResult = {
+  lat: string;
+  lon: string;
+  display_name: string;
+  type?: string;
+  class?: string;
+};
+
+type NominatimReverseResult = {
+  display_name?: string;
+};
+
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  let body: {
+    address?: unknown;
+    latitude?: unknown;
+    longitude?: unknown;
+  };
+
+  try {
+    body = (await request.json()) as typeof body;
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid request body." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    if (
+      typeof body.latitude === "number" &&
+      typeof body.longitude === "number" &&
+      Number.isFinite(body.latitude) &&
+      Number.isFinite(body.longitude) &&
+      body.latitude >= -90 &&
+      body.latitude <= 90 &&
+      body.longitude >= -180 &&
+      body.longitude <= 180
+    ) {
+      return await reverseGeocode(body.latitude, body.longitude);
+    }
+
+    const address =
+      typeof body.address === "string" ? body.address.trim() : "";
+
+    if (address) {
+      return await forwardGeocode(address);
+    }
+
+    return NextResponse.json(
+      { error: "Provide an address, or latitude and longitude." },
+      { status: 400 }
+    );
+  } catch (error) {
+    console.error("[geocode] lookup failed:", error);
+
+    return NextResponse.json(
+      { error: "We couldn't look up that location. Please try again." },
+      { status: 502 }
+    );
+  }
+}
+
+async function forwardGeocode(address: string): Promise<NextResponse> {
+  const url = new URL(`${NOMINATIM_URL}/search`);
+
+  url.searchParams.set("q", address);
+  url.searchParams.set("format", "jsonv2");
+  url.searchParams.set("addressdetails", "1");
+  url.searchParams.set("limit", "5");
+  // Constrain lookups to the Philippines. Without this, common names (e.g.
+  // "San Jose", "Labanon") resolve to foreign places first, so the search
+  // pin lands in the wrong country instead of the customer's town/barangay.
+  url.searchParams.set("countrycodes", "ph");
+
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": USER_AGENT,
+      Accept: "application/json",
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    console.error("[geocode] Nominatim search failed:", response.status);
+
+    return NextResponse.json(
+      {
+        error:
+          "The address lookup service is unavailable. Please try again later.",
+      },
+      { status: 502 }
+    );
+  }
+
+  const results = (await response.json()) as NominatimSearchResult[];
+
+  if (!Array.isArray(results) || results.length === 0) {
+    return NextResponse.json(
+      {
+        error:
+          "We couldn't find that address. Try adding the barangay, city, or province.",
+      },
+      { status: 404 }
+    );
+  }
+
+  // The client currently expects one coordinate pair. We return the best
+  // Nominatim result, but request multiple candidates so the lookup has more
+  // context and can be extended to a result-selection UI later.
+  const best = results[0];
+
+  const latitude = Number(best.lat);
+  const longitude = Number(best.lon);
+
+  if (
+    !Number.isFinite(latitude) ||
+    !Number.isFinite(longitude) ||
+    !best.display_name
+  ) {
+    return NextResponse.json(
+      { error: "The address lookup returned an invalid location." },
+      { status: 502 }
+    );
+  }
+
+  return NextResponse.json({
+    latitude,
+    longitude,
+    address: best.display_name,
+  } satisfies GeocodeResponse);
+}
+
+async function reverseGeocode(
+  latitude: number,
+  longitude: number
+): Promise<NextResponse> {
+  const url = new URL(`${NOMINATIM_URL}/reverse`);
+
+  url.searchParams.set("lat", String(latitude));
+  url.searchParams.set("lon", String(longitude));
+  url.searchParams.set("format", "jsonv2");
+  url.searchParams.set("addressdetails", "1");
+  url.searchParams.set("zoom", "18");
+
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": USER_AGENT,
+      Accept: "application/json",
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    console.error("[geocode] Nominatim reverse failed:", response.status);
+
+    return NextResponse.json(
+      {
+        error:
+          "The location lookup service is unavailable. Please try again later.",
+      },
+      { status: 502 }
+    );
+  }
+
+  const result = (await response.json()) as NominatimReverseResult;
+
+  return NextResponse.json({
+    latitude,
+    longitude,
+    address: result.display_name ?? "Selected location",
+  } satisfies GeocodeResponse);
+}

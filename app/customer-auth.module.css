@@ -1,0 +1,405 @@
+/* ========================= Customer auth pages =========================
+   Design language matches the admin login/reset-password cards
+   (Figma "Admin Page Prototype"):
+   - Page background          #F9FAFB
+   - Card 448px wide, white, radius 8, soft shadow
+   - Heading                 26px / 700 / #1F2937
+   - Subheading              14px / muted
+   - Field labels             12px / #4B5563
+   - Inputs                   16px / border #D1D5DB / placeholder #9CA3AF
+   - Buttons                 #E5C034, radius 6, height 48
+======================================================================= */
+
+.page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 48px 20px 72px;
+  background: var(--bg-page);
+  color: var(--ink);
+}
+
+.card {
+  width: 100%;
+  max-width: 448px;
+  padding: 32px;
+  background: var(--card-bg);
+  border: 1px solid rgba(209, 213, 219, 0.6);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.heading {
+  margin-bottom: 8px;
+  font-size: 26px;
+  line-height: 36px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--ink);
+}
+
+.subheading {
+  margin: 0 0 28px;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--label);
+}
+
+.input {
+  width: 100%;
+  height: 48px;
+  padding: 12px 16px;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: inherit;
+  color: var(--ink);
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.input::placeholder {
+  color: var(--placeholder);
+}
+
+.input:hover {
+  border-color: #b6bcc6;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(229, 192, 52, 0.18);
+}
+
+.input:disabled {
+  background: #f2f6f9;
+  cursor: not-allowed;
+}
+
+.button {
+  width: 100%;
+  height: 48px;
+  margin-top: 10px;
+  padding: 12px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #000000;
+  background: var(--accent);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.05s ease;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(229, 192, 52, 0.4);
+}
+
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error {
+  margin: -4px 0 14px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--error);
+}
+
+.switch {
+  margin: 20px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.switchLink {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.switchLink:hover {
+  text-decoration: underline;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+.note {
+  margin: 0 0 20px;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--muted);
+}
+
+/* ----------------------------- Forgot ------------------------------ */
+
+.forgotArea {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.forgotLink {
+  padding: 4px 8px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  line-height: 20px;
+  font-family: inherit;
+  color: var(--muted);
+  text-align: center;
+  cursor: pointer;
+}
+
+.forgotLink:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+.forgotForm {
+  width: 100%;
+}
+
+.forgotLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--label);
+}
+
+.forgotRow {
+  display: flex;
+  gap: 8px;
+}
+
+/* ------------------------- Signup steps ---------------------------- */
+
+.steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.stepDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d1d5db;
+  flex-shrink: 0;
+}
+
+.stepDotActive {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(229, 192, 52, 0.25);
+}
+
+.stepDotDone {
+  background: #15803d;
+}
+
+.stepLabel {
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--placeholder);
+}
+
+.stepLabelActive {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.stepLine {
+  flex: 1;
+  height: 1px;
+  background: #d1d5db;
+}
+
+.stepPanel {
+  display: flex;
+  flex-direction: column;
+}
+
+.stepHidden {
+  display: none;
+}
+
+.stepActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.stepActions .button {
+  flex: 1;
+  margin-top: 0;
+}
+
+.backButton {
+  height: 48px;
+  padding: 12px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--ink);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.backButton:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+/* --------------------- Confirmation (signup) ------------------------ */
+
+.confirmPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 0 4px;
+}
+
+.confirmIcon {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #15803d;
+  background: #ecfdf5;
+  border-radius: 50%;
+}
+
+.confirmTitle {
+  margin: 0 0 8px;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.confirmText {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--muted);
+}
+
+/* ---------------------------- Responsive --------------------------- */
+
+@media (max-width: 520px) {
+  .page {
+    padding: 32px 16px 56px;
+  }
+
+  .card {
+    padding: 24px;
+  }
+}
+
+
+.forgotRow .input {
+  flex: 1;
+  width: auto;
+  height: 42px;
+  padding: 8px 14px;
+  font-size: 14px;
+}
+
+.forgotButton {
+  flex-shrink: 0;
+  height: 38px;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #000000;
+  background: var(--accent);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.forgotButton:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.forgotButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.forgotSuccess {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 20px;
+  color: #15803d;
+}

@@ -1,0 +1,178 @@
+/* ------------------------------------------------------------------
+   Fixed 255px black sidebar — desktop reference (1549 x 886).
+   ------------------------------------------------------------------ */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 255px;
+  display: flex;
+  flex-direction: column;
+  background: #000000;
+  color: #f3f4f6;
+  z-index: 50;
+  overflow: hidden;
+}
+
+/* Sidebar must NOT scroll independently under normal desktop conditions;
+   only allow it on very short viewports. */
+@media (max-height: 620px) {
+  .sidebar {
+    overflow-y: auto;
+  }
+}
+
+/* --- Brand -------------------------------------------------------- */
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  height: 76px;
+  padding: 0 20px; /* logo left edge ~x:20 */
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 17px; /* logo (33px) ends ~x:53, text begins ~x:70 */
+  min-width: 0;
+}
+
+.brandImage {
+  width: 33px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.brandText {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* --- Primary navigation ------------------------------------------- */
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 15px 16px 0 31px; /* icons start ~x:31 */
+}
+
+/* --- Dividers ----------------------------------------------------- */
+.divider {
+  height: 1px;
+  border: 0;
+  background: #1f2937;
+  flex-shrink: 0;
+}
+
+.dividerInset {
+  margin: 20px 16px 0; /* ~x:16 to ~x:239 */
+}
+
+/* --- Secondary navigation ----------------------------------------- */
+.secondaryNav {
+  padding: 14px 16px 0 31px;
+}
+
+/* --- Spacer keeps Log out at the bottom ---------------------------- */
+.spacer {
+  flex: 1;
+}
+
+/* --- Log out ------------------------------------------------------- */
+.logoutForm {
+  flex-shrink: 0;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  height: 48px;
+  padding: 0 32px;
+  border: 0;
+  background: none;
+  color: #d1d5db;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.logoutButton:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+/* --- Mobile: drawer, backdrop and menu button ---------------------- */
+.menuButton {
+  display: none;
+}
+
+.closeButton {
+  display: none;
+}
+
+.backdrop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .menuButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 60;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #111827;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+  }
+
+  .closeButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    padding: 6px;
+    border: 0;
+    background: none;
+    color: #f3f4f6;
+    cursor: pointer;
+  }
+}

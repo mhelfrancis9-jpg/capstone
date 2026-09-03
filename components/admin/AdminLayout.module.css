@@ -1,0 +1,46 @@
+.shell {
+  min-height: 100vh;
+}
+
+/* Main content begins exactly after the 255px sidebar. */
+.main {
+  position: relative;
+  margin-left: 255px;
+  min-height: 100vh;
+  background: var(--bg-page);
+}
+
+/* Top-right administrator block, aligned with the page title band. */
+.headerSlot {
+  position: absolute;
+  top: 28px; /* matches .content padding-top so the Administrator
+                text lines up with the page title */
+  right: 25px;
+  z-index: 5;
+}
+
+/* Content starts ~x:280 / ~y:37 on the 1549x886 reference. Vertical padding
+   is kept compact so the whole dashboard fits a 100vh viewport. */
+.content {
+  padding: 28px 25px 20px;
+}
+
+@media (max-width: 768px) {
+  .main {
+    margin-left: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .headerSlot {
+    position: static;
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 20px 0;
+  }
+
+  .content {
+    flex: 1;
+    padding: 24px 20px 32px;
+  }
+}

@@ -1,0 +1,10 @@
+.page {
+  max-width: none;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 32px;
+  color: #172033;
+}

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Universal Location Search with Autocomplete</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+      padding: 30px;
+    }
+
+    .container {
+      width: min(900px, 100%);
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+    }
+
+    .description {
+      color: #6b7280;
+      margin-bottom: 20px;
+    }
+
+    /* SEARCH CONTAINER WITH AUTOCOMPLETE STYLES */
+    .search-container {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .search-box input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
+    .search-box button {
+      width: auto;
+      padding: 0 20px;
+      background: #2563eb;
+    }
+
+    .search-box button:hover {
+      background: #1d4ed8;
+    }
+
+    /* DROPDOWN LIST STYLES */
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid #d1d5db;
+      border-top: none;
+      z-index: 1000;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: #fff;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      max-height: 250px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .autocomplete-item {
+      padding: 12px 15px;
+      cursor: pointer;
+      font-size: 14px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .autocomplete-item:last-child {
+      border-bottom: none;
+    }
+
+    .autocomplete-item:hover {
+      background-color: #e5e7eb;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      flex: 1;
+      border: 0;
+      padding: 15px;
+      border-radius: 10px;
+      background: #111827;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #374151;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    button.btn-stop {
+      background: #dc2626;
+    }
+
+    button.btn-stop:hover {
+      background: #b91c1c;
+    }
+
+    .status {
+      margin-top: 15px;
+      padding: 14px;
+      border-radius: 10px;
+      background: #f3f4f6;
+      line-height: 1.5;
+    }
+
+    #map {
+      width: 100%;
+      height: 450px;
+      margin-top: 20px;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .location {
+      margin-top: 20px;
+      display: none;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .location div {
+      padding: 12px 15px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .location div:last-child {
+      border-bottom: 0;
+    }
+
+    .label {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 3px;
+    }
+
+    .value {
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .accuracy-good {
+      color: #15803d;
+    }
+
+    .accuracy-medium {
+      color: #ca8a04;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="card">
+      <h1>📍 Universal Location Search + Autocomplete</h1>
+
+      <p class="description">
+        Type a location to see live suggestions or use GPS tracking.
+      </p>
+
+      <!-- SEARCH CONTAINER WITH DROPDOWN -->
+      <div class="search-container">
+        <div class="search-box">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Type a place (e.g., Labanon, SM Mall, Zone 5 Bacacay)"
+            autocomplete="off"
+          />
+          <button id="searchBtn">Search</button>
+        </div>
+        <!-- DROPDOWN LIST CONTAINER -->
+        <div id="autocompleteList" class="autocomplete-items"></div>
+      </div>
+
+      <div class="btn-group">
+        <button id="startBtn">Use My Current GPS</button>
+        <button id="stopBtn" class="btn-stop" disabled>Stop GPS</button>
+      </div>
+
+      <div id="status" class="status">
+        Enter a location above or click "Use My Current GPS".
+      </div>
+
+      <!-- MAP -->
+      <div id="map"></div>
+
+      <!-- LOCATION INFORMATION -->
+      <div id="locationInfo" class="location">
+        <div>
+          <div class="label">Full Address / Location</div>
+          <div id="locationName" class="value">-</div>
+        </div>
+
+        <div>
+          <div class="label">Latitude</div>
+          <div id="latitude" class="value">-</div>
+        </div>
+
+        <div>
+          <div class="label">Longitude</div>
+          <div id="longitude" class="value">-</div>
+        </div>
+
+        <div>
+          <div class="label">Accuracy Source</div>
+          <div id="accuracy" class="value">-</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const autocompleteList = document.getElementById("autocompleteList");
+    const startBtn = document.getElementById("startBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const status = document.getElementById("status");
+    const locationInfo = document.getElementById("locationInfo");
+
+    const locationName = document.getElementById("locationName");
+    const latitude = document.getElementById("latitude");
+    const longitude = document.getElementById("longitude");
+    const accuracy = document.getElementById("accuracy");
+
+    // Initialize Map
+    const map = L.map("map").setView([12.8797, 121.7740], 6);
+
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    let marker = null;
+    let accuracyCircle = null;
+    let watchId = null;
+    let debounceTimer = null;
+
+    // EVENT LISTENERS
+    searchInput.addEventListener("input", handleInputChange);
+    searchBtn.addEventListener("click", () => {
+      closeAutocomplete();
+      executeUniversalSearch();
+    });
+    searchInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        closeAutocomplete();
+        executeUniversalSearch();
+      }
+    });
+
+    // Close autocomplete list if user clicks outside
+    document.addEventListener("click", (e) => {
+      if (e.target !== searchInput && e.target !== autocompleteList) {
+        closeAutocomplete();
+      }
+    });
+
+    startBtn.addEventListener("click", startTracking);
+    stopBtn.addEventListener("click", stopTracking);
+
+    // DEBOUNCED INPUT HANDLER FOR AUTOCOMPLETE
+    function handleInputChange() {
+      const query = searchInput.value.trim();
+      clearTimeout(debounceTimer);
+
+      if (query.length < 3) {
+        closeAutocomplete();
+        return;
+      }
+
+      // Wait 300ms after user stops typing before fetching API
+      debounceTimer = setTimeout(() => {
+        fetchAutocompleteSuggestions(query);
+      }, 300);
+    }
+
+    // FETCH AUTOCOMPLETE SUGGESTIONS
+    async function fetchAutocompleteSuggestions(query) {
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${encodeURIComponent(query)}&countrycodes=ph&limit=5`;
+        const res = await fetch(url);
+        const results = await res.json();
+
+        renderAutocompleteList(results);
+      } catch (err) {
+        console.error("Autocomplete error:", err);
+      }
+    }
+
+    // RENDER DROPDOWN LIST ITEMS
+    function renderAutocompleteList(items) {
+      autocompleteList.innerHTML = "";
+
+      if (!items || items.length === 0) {
+        closeAutocomplete();
+        return;
+      }
+
+      items.forEach((item) => {
+        const div = document.createElement("div");
+        div.className = "autocomplete-item";
+        div.textContent = item.display_name;
+
+        div.addEventListener("click", () => {
+          searchInput.value = item.display_name;
+          closeAutocomplete();
+          
+          const lat = parseFloat(item.lat);
+          const lon = parseFloat(item.lon);
+          renderMapLocation(lat, lon, item.display_name, "Search Suggestion");
+          status.textContent = `Selected: ${item.display_name}`;
+        });
+
+        autocompleteList.appendChild(div);
+      });
+
+      autocompleteList.style.display = "block";
+    }
+
+    function closeAutocomplete() {
+      autocompleteList.innerHTML = "";
+      autocompleteList.style.display = "none";
+    }
+
+    // SEARCH LOGIC FOR SEARCH BUTTON OR ENTER KEY
+    async function executeUniversalSearch() {
+      const rawQuery = searchInput.value.trim();
+
+      if (!rawQuery) {
+        status.textContent = "Please enter a location to search.";
+        return;
+      }
+
+      stopTracking();
+      status.textContent = `Searching for "${rawQuery}"...`;
+
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${encodeURIComponent(rawQuery)}&countrycodes=ph&limit=1`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data && data.length > 0) {
+          const item = data[0];
+          const lat = parseFloat(item.lat);
+          const lon = parseFloat(item.lon);
+
+          renderMapLocation(lat, lon, item.display_name, "Search Result");
+          status.textContent = `Found: ${item.display_name}`;
+        } else {
+          status.textContent = `No location found for "${rawQuery}". Try selecting from suggestions.`;
+        }
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Search error. Please check your network connection.";
+      }
+    }
+
+    function renderMapLocation(lat, lon, displayName, sourceText) {
+      if (marker) map.removeLayer(marker);
+      if (accuracyCircle) map.removeLayer(accuracyCircle);
+
+      marker = L.marker([lat, lon]).addTo(map);
+      marker.bindPopup(`<strong>${displayName}</strong>`).openPopup();
+
+      map.setView([lat, lon], 16, { animate: true });
+
+      locationName.textContent = displayName;
+      latitude.textContent = lat.toFixed(8);
+      longitude.textContent = lon.toFixed(8);
+      accuracy.textContent = sourceText;
+      accuracy.className = "value";
+
+      locationInfo.style.display = "block";
+    }
+
+    // LIVE GPS TRACKING
+    function startTracking() {
+      if (!navigator.geolocation) {
+        status.textContent = "Geolocation is not supported by your browser.";
+        return;
+      }
+
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      status.textContent = "Acquiring GPS Signal...";
+
+      watchId = navigator.geolocation.watchPosition(
+        handleSuccess,
+        handleError,
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0
+        }
+      );
+    }
+
+    function stopTracking() {
+      if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+      }
+
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    }
+
+    function handleSuccess(position) {
+      const coords = position.coords;
+      const lat = coords.latitude;
+      const lng = coords.longitude;
+      const acc = coords.accuracy;
+
+      if (marker) map.removeLayer(marker);
+      if (accuracyCircle) map.removeLayer(accuracyCircle);
+
+      marker = L.marker([lat, lng]).addTo(map);
+      marker.bindPopup(`<strong>Your GPS Location</strong><br>Accuracy: ±${Math.round(acc)}m`).openPopup();
+
+      accuracyCircle = L.circle([lat, lng], { radius: acc }).addTo(map);
+
+      map.setView([lat, lng], 18, { animate: true });
+
+      locationName.textContent = "Current Device GPS Coordinates";
+      latitude.textContent = lat.toFixed(8);
+      longitude.textContent = lng.toFixed(8);
+      accuracy.textContent = `Live GPS (±${Math.round(acc)} meters)`;
+      accuracy.className = "value accuracy-good";
+
+      locationInfo.style.display = "block";
+      status.textContent = `GPS Active. Accuracy: ±${Math.round(acc)} meters.`;
+    }
+
+    function handleError(error) {
+      stopTracking();
+      status.textContent = "Unable to get current location. Ensure GPS/Location permissions are active.";
+    }
+  </script>
+
+</body>
+</html>
