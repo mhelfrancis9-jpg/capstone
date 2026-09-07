@@ -45,24 +45,6 @@ const AI_SUGGESTIONS = [
   "Racing cross-country, lightest possible",
 ];
 
-const LANDING_PARTS = [
-  { n: "1", title: "Frameset", desc: "Frame and fork package." },
-  { n: "2", title: "Handlebars", desc: "Width matched to your shoulders." },
-  { n: "3", title: "Stems", desc: "Length sets your reach." },
-  { n: "4", title: "Seatpost", desc: "Diameter matched to your frame." },
-  { n: "5", title: "Saddle", desc: "Fitted and levelled in the workshop." },
-  { n: "6", title: "Wheelset", desc: "Rim depth and freehub body." },
-  { n: "7", title: "Tires", desc: "Mounted tubeless with sealant." },
-  { n: "8", title: "Front Derailleur", desc: "Mounted, cabled and trimmed." },
-  { n: "9", title: "Rear Derailleur", desc: "Hung, indexed and road-tested." },
-  { n: "10", title: "Crankset", desc: "Bottom bracket faced and installed." },
-  { n: "11", title: "Cassette / Cog", desc: "Gearing matched to your terrain." },
-  { n: "12", title: "Chain", desc: "Sized to your drivetrain." },
-  { n: "13", title: "Brakeset", desc: "Levers and calipers, bled and bedded." },
-  { n: "14", title: "Rotors", desc: "Size suited to your brakes." },
-  { n: "15", title: "Pedals", desc: "Greased and torqued before ship." },
-];
-
 export default function CustomBikeBuilder({
   steps,
   stepsError,
@@ -85,17 +67,18 @@ export default function CustomBikeBuilder({
   );
 
   const startBuilding = () => {
-    // Pre-select the first product + first axis option on every step so the
-    // customer can jump straight in and refine as they go.
+    // Pre-select the first in-stock product + first axis option on every step
+    // so the customer can jump straight in and refine as they go.
     const initial: Record<number, Selection> = {};
     for (const step of orderedSteps) {
-      if (step.products.length === 0) continue;
+      const firstInStock = step.products.find((p) => p.stock > 0);
+      if (!firstInStock) continue;
       const values: Record<string, string> = {};
       for (const axis of step.axes) {
         if (axis.options.length > 0) values[axis.label] = axis.options[0];
       }
       initial[step.stepNumber] = {
-        product: step.products[0],
+        product: firstInStock,
         axisValues: values,
       };
     }
@@ -157,7 +140,8 @@ export default function CustomBikeBuilder({
             <span className={styles.priceValue}>
               {formatPeso(
                 orderedSteps.reduce(
-                  (sum, step) => sum + (step.products[0]?.price ?? 0),
+                  (sum, step) =>
+                    sum + (step.products.find((p) => p.stock > 0)?.price ?? 0),
                   0
                 )
               )}
@@ -236,14 +220,14 @@ export default function CustomBikeBuilder({
 
           <h2 className={styles.partsHeading}>Choose the parts yourself</h2>
           <ul className={styles.partsList}>
-            {LANDING_PARTS.map((part) => (
-              <li className={styles.partItem} key={part.n}>
+            {orderedSteps.map((step) => (
+              <li className={styles.partItem} key={step.stepNumber}>
                 <span className={styles.partBadge} aria-hidden="true">
-                  {part.n}
+                  {step.stepNumber}
                 </span>
                 <div className={styles.partBody}>
-                  <p className={styles.partTitle}>{part.title}</p>
-                  <p className={styles.partDesc}>{part.desc}</p>
+                  <p className={styles.partTitle}>{step.name}</p>
+                  <p className={styles.partDesc}>{step.description}</p>
                 </div>
               </li>
             ))}
@@ -304,7 +288,10 @@ export default function CustomBikeBuilder({
       setSelections((prev) => ({
         ...prev,
         [step.stepNumber]: {
-          product: prev[step.stepNumber]?.product ?? step.products[0],
+          product:
+            prev[step.stepNumber]?.product ??
+            step.products.find((p) => p.stock > 0) ??
+            step.products[0],
           axisValues: {
             ...(prev[step.stepNumber]?.axisValues ?? {}),
             [label]: value,
@@ -354,13 +341,20 @@ export default function CustomBikeBuilder({
               const active =
                 selection?.product.id === product.id ||
                 (!selection && product === step.products[0]);
+              const outOfStock = product.stock <= 0;
+              const onSale =
+                product.compareAtPrice !== null &&
+                product.compareAtPrice > product.price;
               return (
                 <button
                   key={product.id}
                   type="button"
-                  className={active ? styles.productCardActive : styles.productCard}
+                  className={
+                    active ? styles.productCardActive : styles.productCard
+                  }
                   onClick={() => chooseProduct(product)}
                   aria-pressed={active}
+                  disabled={outOfStock}
                 >
                   <div className={styles.productImage}>
                     <Image
@@ -370,6 +364,9 @@ export default function CustomBikeBuilder({
                       sizes="(max-width: 640px) 45vw, 220px"
                       className={styles.productImg}
                     />
+                    {onSale ? (
+                      <span className={styles.saleBadge}>Sale</span>
+                    ) : null}
                   </div>
                   <div className={styles.productBody}>
                     <h3 className={styles.productName}>{product.name}</h3>
@@ -378,6 +375,18 @@ export default function CustomBikeBuilder({
                     ) : null}
                     <p className={styles.productPrice}>
                       {formatPeso(product.price)}
+                      {onSale ? (
+                        <span className={styles.compareAt}>
+                          {formatPeso(product.compareAtPrice ?? 0)}
+                        </span>
+                      ) : null}
+                    </p>
+                    <p
+                      className={
+                        outOfStock ? styles.stockOut : styles.productStock
+                      }
+                    >
+                      {outOfStock ? "Out of stock" : `${product.stock} in stock`}
                     </p>
                   </div>
                 </button>
@@ -490,9 +499,10 @@ export default function CustomBikeBuilder({
         size: sizeText || "Standard",
         color: colorText,
         quantity: 1,
-        // Builder parts don't expose per-part stock to this component; 0 means
-        // "no cap" so the line keeps its current unlimited behavior in the cart.
-        stock: 0,
+        // Carry the real stock so the cart/order line reflects the product's
+        // actual availability from the Admin catalog (0 means "no cap" for
+        // legacy behavior, but the real value is used when available).
+        stock: selection!.product.stock,
       });
     }
     setAdded(true);

@@ -10,6 +10,12 @@ import { type QueryResult } from "@/lib/data/types";
  * through the admin (service-role) client so the public storefront never
  * depends on RLS edge cases while still returning only what is needed to
  * render the builder.
+ *
+ * Products are discovered from the admin's `products` table: any product
+ * whose `category_id` points to a builder category in `categories` is
+ * automatically shown under the corresponding step. When an admin adds or
+ * updates a product under a builder category, it immediately appears in
+ * the customer-facing builder — no manual junction-table linking required.
  */
 
 export type BuilderAxis = {
@@ -24,6 +30,8 @@ export type BuilderProduct = {
   description: string | null;
   specs: string[];
   price: number;
+  compareAtPrice: number | null;
+  stock: number;
   image: string | null;
 };
 
@@ -47,16 +55,37 @@ type BuilderProductRow = {
   description: string | null;
   specs: string[] | null;
   price: number | string;
+  compare_at_price: number | string | null;
+  stock: number | string;
   product_images: ImageRow[] | ImageRow | null;
 };
-type StepLinkRow = { sort_order: number; products: BuilderProductRow };
 type StepRow = {
   step_number: number;
   name: string;
   description: string;
   customization_axes: BuilderAxis[] | null;
   notice: string | null;
-  bike_builder_products: StepLinkRow[] | StepLinkRow | null;
+};
+
+// ---------------------------------------------------------------------------
+// Builder slug → step-number mapping (mirrors categoryConfig.ts stepNumber)
+// ---------------------------------------------------------------------------
+const SLUG_TO_STEP: Record<string, number> = {
+  frameset: 1,
+  handlebar: 2,
+  stem: 3,
+  seatpost: 4,
+  saddle: 5,
+  wheelset: 6,
+  tires: 7,
+  "front-derailleur": 8,
+  "rear-derailleur": 9,
+  crankset: 10,
+  cassette: 11,
+  chain: 12,
+  brakeset: 13,
+  rotors: 14,
+  pedals: 15,
 };
 
 /** PostgREST embeds a to-one relation as a single object, not an array. */
@@ -73,59 +102,112 @@ function primaryImage(
   return primary?.url ?? null;
 }
 
+function mapProduct(raw: BuilderProductRow): BuilderProduct {
+  return {
+    id: String(raw.id),
+    name: raw.name,
+    slug: raw.slug,
+    description: raw.description ?? null,
+    specs: raw.specs ?? [],
+    price: Number(raw.price),
+    compareAtPrice:
+      raw.compare_at_price === null || raw.compare_at_price === undefined
+        ? null
+        : Number(raw.compare_at_price),
+    stock: Number(raw.stock ?? 0),
+    image: primaryImage(raw.product_images),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// getBikeBuilderSteps
+//
+// Products are sourced exclusively from the admin's `products` table — any
+// product whose category slug maps to a builder step is automatically shown
+// under that step. The `bike_builder_products` junction table is NOT used.
+// ---------------------------------------------------------------------------
+
 export async function getBikeBuilderSteps(): Promise<QueryResult<BuilderStep[]>> {
   const admin = getAdminClient();
   if (!admin) return { data: null, error: missingServiceRoleMessage() };
 
-  const { data, error } = await admin
+  // ------------------------------------------------------------------
+  // 1. Fetch step definitions (no product join needed).
+  // ------------------------------------------------------------------
+  const { data: stepRows, error: stepsError } = await admin
     .from("bike_builder_steps")
-    .select(`
-      step_number,
-      name,
-      description,
-      customization_axes,
-      notice,
-      bike_builder_products(
-        sort_order,
-        products(
-          id, name, slug, description, specs, price,
-          product_images(url, sort_order, is_primary)
-        )
-      )
-    `)
+    .select("step_number, name, description, customization_axes, notice")
     .order("step_number", { ascending: true });
 
-  if (error) {
-    return { data: null, error: toFriendlyDbError(error) };
+  if (stepsError) {
+    return { data: null, error: toFriendlyDbError(stepsError) };
   }
 
-  const steps = (data as unknown as StepRow[] | null) ?? [];
+  const rawSteps = (stepRows as unknown as StepRow[] | null) ?? [];
 
-  const mapped: BuilderStep[] = steps.map((step) => {
-    const links = asArray(step.bike_builder_products).sort(
-      (a, b) => a.sort_order - b.sort_order
+  const steps: BuilderStep[] = rawSteps.map((s) => ({
+    stepNumber: Number(s.step_number),
+    name: s.name,
+    description: s.description,
+    axes: s.customization_axes ?? [],
+    notice: s.notice ?? null,
+    products: [],
+  }));
+
+  const stepByNumber = new Map<number, BuilderStep>();
+  for (const step of steps) {
+    stepByNumber.set(step.stepNumber, step);
+  }
+
+  // ------------------------------------------------------------------
+  // 2. Fetch products from the admin's products table by category.
+  //    Any product whose category slug maps to a builder step is included.
+  // ------------------------------------------------------------------
+  const builderSlugs = Object.keys(SLUG_TO_STEP);
+
+  const { data: builderCats } = await admin
+    .from("categories")
+    .select("id, slug")
+    .in("slug", builderSlugs)
+    .eq("is_active", true);
+
+  if (builderCats && builderCats.length > 0) {
+    const catIdToSlug = new Map<string, string>(
+      builderCats.map((c: { id: string; slug: string }) => [c.id, c.slug])
     );
+    const catIds = [...catIdToSlug.keys()];
 
-    const products: BuilderProduct[] = links.map((link) => ({
-      id: String(link.products.id),
-      name: link.products.name,
-      slug: link.products.slug,
-      description: link.products.description ?? null,
-      specs: link.products.specs ?? [],
-      price: Number(link.products.price),
-      image: primaryImage(link.products.product_images),
-    }));
+    const { data: catProducts } = await admin
+      .from("products")
+      .select(
+        "id, name, slug, description, specs, price, compare_at_price, stock, category_id," +
+          "product_images(url, sort_order, is_primary)"
+      )
+      .in("category_id", catIds)
+      .eq("status", "active");
 
-    return {
-      stepNumber: Number(step.step_number),
-      name: step.name,
-      description: step.description,
-      axes: step.customization_axes ?? [],
-      notice: step.notice ?? null,
-      products,
-    };
-  });
+    if (catProducts && catProducts.length > 0) {
+      for (const raw of catProducts) {
+        const row = raw as unknown as BuilderProductRow & {
+          category_id: string;
+        };
+        const slug = catIdToSlug.get(row.category_id);
+        if (!slug) continue;
+        const stepNum = SLUG_TO_STEP[slug];
+        if (!stepNum) continue;
 
-  return { data: mapped, error: null };
+        const step = stepByNumber.get(stepNum);
+        if (!step) continue;
+
+        step.products.push(mapProduct(row));
+      }
+
+      for (const step of steps) {
+        step.products.sort((a, b) => a.name.localeCompare(b.name));
+      }
+    }
+  }
+
+  return { data: steps, error: null };
 }
 

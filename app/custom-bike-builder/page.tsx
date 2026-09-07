@@ -10,6 +10,11 @@ export const metadata: Metadata = {
     "Build your own custom bike — pick every part or let our AI builder choose them for you. Hand-assembled in Tabaco City and shipped ride-ready.",
 };
 
+// Always read live builder steps + products from the database on every request
+// instead of prerendering a static shell at build time (matches every other
+// data-driven page in this app).
+export const dynamic = "force-dynamic";
+
 /**
  * Route: /custom-bike-builder
  * Reached from the homepage "Build Your Own Custom Bike" promo (Start Now).

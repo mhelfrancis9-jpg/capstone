@@ -1,0 +1,376 @@
+/* ==========================================================================
+   Bike Equipment — filter panel, toolbar, search, sort and product grid.
+   Matches the existing LnR storefront language (Inter body, subtle borders,
+   gold activation accent). Product cards reuse ProductCard.module.css.
+   ========================================================================== */
+
+.equipment {
+  margin-top: 40px;
+}
+
+/* Screen-reader-only heading (visual label is the page H1). */
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Toolbar -------------------------------------------------------------- */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filterToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  cursor: pointer;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2b2b2b;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.filterToggle:hover {
+  border-color: #e1b93c;
+  background: #fdf6e0;
+}
+
+.chevron {
+  color: #6b7280;
+  transition: transform 0.15s ease;
+}
+
+.chevronOpen {
+  color: #6b7280;
+  transform: rotate(180deg);
+  transition: transform 0.15s ease;
+}
+
+.searchForm {
+  position: relative;
+  flex: 1 1 240px;
+  min-width: 200px;
+  max-width: 380px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translateY(-50%);
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  height: 40px;
+  box-sizing: border-box;
+  padding: 0 12px 0 36px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.searchInput:focus {
+  border-color: #e1b93c;
+  box-shadow: 0 0 0 3px rgba(225, 185, 60, 0.25);
+}
+
+.sortLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  margin-left: auto;
+}
+
+.sortLabelText {
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.sortSelect {
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.sortSelect:focus {
+  border-color: #e1b93c;
+}
+
+/* --- Filter panel --------------------------------------------------------- */
+
+.filterPanel {
+  margin-top: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+.table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  background: #f9fafb;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6b7280;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.itemsCol {
+  width: 96px;
+  text-align: right;
+}
+
+.row,
+.activeRow {
+  cursor: pointer;
+}
+
+.row:hover {
+  background: #f9fafb;
+}
+
+.activeRow {
+  background: #fdf6e0;
+  box-shadow: inset 3px 0 0 0 #e1b93c;
+}
+
+.row td,
+.activeRow td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f2f4;
+  vertical-align: top;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2b2b2b;
+}
+
+.categoryCell {
+  font-weight: 600;
+  font-family: "Barlow Condensed", "Archivo", sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.01em;
+}
+
+.customizationCell {
+  color: #4b5563;
+}
+
+.itemsCell {
+  text-align: right;
+  font-weight: 700;
+  color: #111827;
+}
+
+.filterFooter {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.buildLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: #1a1a1a;
+  color: #ffffff;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.buildLink:hover {
+  background: #000000;
+}
+
+/* --- Count + grid --------------------------------------------------------- */
+
+.count {
+  margin: 24px 0 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-top: 24px;
+}
+
+.empty {
+  margin: 24px 0 0;
+  padding: 40px 0 60px;
+  text-align: center;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-size: 15px;
+  color: #6b7280;
+}
+
+/* --- Responsive ----------------------------------------------------------- */
+
+@media (max-width: 1024px) and (min-width: 901px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .toolbar {
+    gap: 10px;
+  }
+
+  .searchForm {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .sortLabel {
+    margin-left: 0;
+  }
+
+  .filterFooter {
+    justify-content: stretch;
+  }
+
+  .buildLink {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 12px;
+  }
+}
+
+/* --- Grouped filter rows (Parts → component categories) -------------------- */
+
+.childRow {
+  cursor: pointer;
+}
+
+.childRow:hover {
+  background: #f9fafb;
+}
+
+.childRow td {
+  padding: 14px 16px;
+}
+
+.childRow td:first-child {
+  position: relative;
+  padding-left: 44px;
+}
+
+.childRow td:first-child::before {
+  content: "";
+  position: absolute;
+  left: 26px;
+  top: 4px;
+  bottom: 4px;
+  width: 1px;
+  background: #e5e7eb;
+}
+
+.childRow td.subCategoryCell {
+  font-family: "Barlow Condensed", "Archivo", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #4b5563;
+}
+
+.childRow.activeRow {
+  background: #fdf6e0;
+}
+
+/* first child in a group gets a top separator */
+.childRow.childRowFirst td {
+  border-top: 1px solid #f1f2f4;
+}
+
+.childRow.childRowFirst td:first-child::before {
+  top: 14px;
+}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { CategoryRow } from "@/lib/data/types";
-import { getCategoryNote } from "./categoryConfig";
+import { getCategoryNote, getStepNumber } from "./categoryConfig";
 import styles from "./CategoryPicker.module.css";
 
 interface CategoryPickerProps {
@@ -20,6 +20,15 @@ export function CategoryPicker({
 
   const selected = categories.find((c) => c.id === value);
   const note = selected ? getCategoryNote(selected.slug) : "";
+  const selectedStep = selected ? getStepNumber(selected.slug) : null;
+
+  // Partition into builder steps (numbered) and other categories.
+  const builderSteps = categories
+    .filter((c) => getStepNumber(c.slug) !== null)
+    .sort((a, b) => (getStepNumber(a.slug) ?? 0) - (getStepNumber(b.slug) ?? 0));
+  const otherCategories = categories.filter(
+    (c) => getStepNumber(c.slug) === null
+  );
 
   return (
     <div className={styles.wrapper}>
@@ -34,6 +43,9 @@ export function CategoryPicker({
       >
         <span className={styles.triggerText}>
           <span className={styles.selectedName}>
+            {selectedStep != null && (
+              <span className={styles.stepBadge}>{selectedStep}</span>
+            )}
             {selected?.name ?? "Select a category"}
           </span>
           {note && (
@@ -64,31 +76,71 @@ export function CategoryPicker({
           {categories.length === 0 ? (
             <p className={styles.empty}>No categories available.</p>
           ) : (
-            categories.map((category) => {
-              const active = category.id === value;
-              const catNote = getCategoryNote(category.slug);
-              return (
-                <button
-                  key={category.id}
-                  type="button"
-                  onClick={() => {
-                    onChange(category.id);
-                    setOpen(false);
-                  }}
-                  aria-pressed={active}
-                  className={`${styles.option} ${active ? styles.optionActive : ""}`}
-                >
-                  <span className={styles.optionName}>
-                    {category.name}
-                  </span>
-                  {catNote && (
-                    <span className={`${styles.optionNote} ${active ? styles.optionNoteActive : ""}`}>
-                      {catNote}
+            <>
+              {builderSteps.length > 0 && (
+                <div className={styles.groupLabel}>Build Steps</div>
+              )}
+              {builderSteps.map((category) => {
+                const active = category.id === value;
+                const catNote = getCategoryNote(category.slug);
+                const stepNum = getStepNumber(category.slug);
+                return (
+                  <button
+                    key={category.id}
+                    type="button"
+                    onClick={() => {
+                      onChange(category.id);
+                      setOpen(false);
+                    }}
+                    aria-pressed={active}
+                    className={`${styles.option} ${active ? styles.optionActive : ""}`}
+                  >
+                    <span className={styles.optionName}>
+                      <span className={styles.optionNum}>
+                        {stepNum != null ? `${stepNum}. ` : ""}
+                      </span>
+                      {category.name}
                     </span>
-                  )}
-                </button>
-              );
-            })
+                    {catNote && (
+                      <span className={`${styles.optionNote} ${active ? styles.optionNoteActive : ""}`}>
+                        {catNote}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+
+              {otherCategories.length > 0 && (
+                <div className={`${styles.groupLabel} ${styles.groupLabelOther}`}>
+                  Other Categories
+                </div>
+              )}
+              {otherCategories.map((category) => {
+                const active = category.id === value;
+                const catNote = getCategoryNote(category.slug);
+                return (
+                  <button
+                    key={category.id}
+                    type="button"
+                    onClick={() => {
+                      onChange(category.id);
+                      setOpen(false);
+                    }}
+                    aria-pressed={active}
+                    className={`${styles.option} ${active ? styles.optionActive : ""}`}
+                  >
+                    <span className={styles.optionName}>
+                      {category.name}
+                    </span>
+                    {catNote && (
+                      <span className={`${styles.optionNote} ${active ? styles.optionNoteActive : ""}`}>
+                        {catNote}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </>
           )}
         </div>
       )}

@@ -483,6 +483,60 @@
   color: #000000;
 }
 
+.compareAt {
+  margin-left: 8px;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #6b7280;
+  text-decoration: line-through;
+}
+
+.saleBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #dc2626;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 15px;
+  letter-spacing: 0.25px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.productStock {
+  margin: 6px 0 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 17px;
+  color: #16a34a;
+}
+
+.stockOut {
+  margin: 6px 0 0;
+  font-family: var(--font-inter), "Inter", "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 17px;
+  color: #b91c1c;
+}
+
+.productCard:disabled,
+.productCardActive:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.productCard:disabled:hover {
+  border-color: #e5e7eb;
+}
+
 /* ---- Builder: axis selectors ---- */
 .optionsCard {
   margin-top: 28px;

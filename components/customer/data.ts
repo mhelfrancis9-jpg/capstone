@@ -15,7 +15,7 @@ export const LOGO_SRC = "/Customerpageimages/lnr%201.png";
  * Shown on product cards / detail pages when a product has no image rows yet
  * (e.g. products added before an image was uploaded).
  */
-export const PRODUCT_PLACEHOLDER_SRC = "/Customerpageimages/Vector.png";
+export const PRODUCT_PLACEHOLDER_SRC = "/assets/brand/13434972.png";
 
 export type HeroSlide = {
   src: string;

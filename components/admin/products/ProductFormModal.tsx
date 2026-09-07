@@ -242,7 +242,11 @@ export default function ProductFormModal({
     }));
   };
 
-  const axes = getCategoryAxes(form.categoryId);
+  // categoryConfig is keyed by slug, but form.categoryId holds the DB id
+  // (UUID). Resolve the selected category's slug so the axes (customization
+  // fields) render for the chosen category instead of always falling back to [].
+  const selectedCategory = categories.find((c) => c.id === form.categoryId);
+  const axes = getCategoryAxes(selectedCategory?.slug);
 
   const validate = () => {
     const next: Record<string, string> = {};
@@ -446,9 +450,12 @@ export default function ProductFormModal({
           </div>
 
           {/* Customization Fields */}
-          {axes.length > 0 && (
+          {axes.length > 0 ? (
             <div>
               <h3 className={styles.sectionTitle}>Customization Fields</h3>
+              <p className={styles.sectionHint}>
+                Tick the fields this product actually comes in.
+              </p>
               <div className={styles.spaceY3}>
                 {axes.map((axis: CategoryAxis) => (
                   <OptionGroup
@@ -456,8 +463,7 @@ export default function ProductFormModal({
                     label={axis.label}
                     hint={axis.hint}
                     enabled={
-                      (customizationValues[axis.flag]?.length ?? 0) > 0 ||
-                      Object.keys(customizationValues).length === 0
+                      axis.flag in customizationValues
                     }
                     onToggle={(enabled) => {
                       setCustomizationValues((prev) => {
@@ -465,6 +471,10 @@ export default function ProductFormModal({
                           const next = { ...prev };
                           delete next[axis.flag];
                           return next;
+                        }
+                        // Initialize with empty array so the field becomes visible
+                        if (!(axis.flag in prev)) {
+                          return { ...prev, [axis.flag]: [] };
                         }
                         return prev;
                       });
@@ -481,6 +491,14 @@ export default function ProductFormModal({
                   />
                 ))}
               </div>
+            </div>
+          ) : (
+            <div>
+              <h3 className={styles.sectionTitle}>Customization Fields</h3>
+              <p className={styles.customizationNotice}>
+                This category has no customizable options. The product will be
+                shown as a fixed configuration in the Bike Builder.
+              </p>
             </div>
           )}
 
