@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "prestart": "node scripts/kill-port.js",
+    "start": "next start -p 3000",
     "lint": "eslint"
   },
   "dependencies": {
